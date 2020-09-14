@@ -6,6 +6,7 @@ insert into GenreBand values(2, 1);
 insert into GenreBand values(4, 4);
 insert into GenreBand values(5, 7);
 insert into GenreBand values(4, 8);
+insert into GenreBand values(2, 2);
 
 insert into BandAlbum values(3, 1);
 insert into BandAlbum values(5, 2);
@@ -15,6 +16,7 @@ insert into BandAlbum values(4, 7);
 insert into BandAlbum values(2, 8);
 insert into BandAlbum values(8, 3);
 insert into BandAlbum values(6, 4);
+insert into BandAlbum values(3, 5);
 
 insert into CollectionTrack values(5, 1);
 insert into CollectionTrack values(8, 2);
