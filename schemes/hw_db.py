@@ -36,11 +36,7 @@ connection = engine.connect()
 # SELECT b.name FROM band b
 # JOIN bandalbum ba ON ba.band_id = b.id
 # JOIN album a ON ba.album_id = a.id
-# WHERE b.id <> (
-# SELECT ba.band_id FROM album a
-# JOIN bandalbum ba ON ba.album_id = a.id
-# WHERE a.year >= '01-01-2020' AND year < '01-01-2021'
-# )
+# WHERE a.year NOT BETWEEN '01-01-2020' AND '01-01-2021'
 # ;
 # """).fetchall()
 # pprint(sel)
@@ -79,21 +75,28 @@ connection = engine.connect()
 
 # исполнителя(-ей), написавшего самый короткий по продолжительности трек (теоретически таких треков может быть несколько);
 # sel = connection.execute("""
-# SELECT b.name, MIN(t.time) FROM band b
+# SELECT b.name FROM band b
 # JOIN bandalbum ba ON b.id = ba.band_id
 # JOIN album a ON ba.album_id = a.id
 # JOIN track t ON a.id = t.album_id
-# GROUP BY b.id
-# ORDER BY MIN(t.time) ASC
-# LIMIT 1;
+# WHERE t.time = (
+#     SELECT MIN(time) FROM track
+# );
 # """).fetchall()
 # pprint(sel)
 
 # название альбомов, содержащих наименьшее количество треков.
 # sel = connection.execute("""
-# SELECT a.name, COUNT(t.album_id) from album a
+# SELECT a.name from album a
 # JOIN track t ON a.id = t.album_id
 # GROUP BY a.id
-# ORDER BY COUNT(t.album_id) ASC;
+# HAVING COUNT(t.album_id) = (
+#     SELECT COUNT(t.album_id) from album a
+#     JOIN track t ON a.id = t.album_id
+#     GROUP BY a.id
+#     ORDER BY COUNT(t.album_id) ASC
+#     LIMIT 1
+# )
+# ;
 # """).fetchall()
 # pprint(sel)
